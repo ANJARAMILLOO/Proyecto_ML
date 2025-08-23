@@ -1,7 +1,16 @@
 from flask import Flask, request, jsonify
 import joblib
+import os
 
 app = Flask(__name__)
+
+# --- Ruta raíz de prueba ---
+@app.route("/", methods=["GET"])
+def home():
+    return jsonify({
+        "mensaje": "✅ API de predicción funcionando",
+        "usar": "Haz POST a /predecir con los datos necesarios"
+    })
 
 # Cargar modelos entrenados
 modelo_litros = joblib.load("modelo_litros_rf.joblib")
@@ -74,10 +83,11 @@ def predecir():
     except Exception as e:
         return jsonify({"error": f"Error al procesar datos: {str(e)}"}), 500
 
+
 if __name__ == '__main__':
-    import os
     port = int(os.environ.get("PORT", 5000))  
     app.run(debug=False, host='0.0.0.0', port=port)
+
 
 
 
